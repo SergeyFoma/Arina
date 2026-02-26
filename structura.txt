@@ -24,4 +24,48 @@
 6. зачёты
 6. экзамены
 
- 
+
+
+-------------------------------------
+git clone
+git init
+git status
+git add .
+git commit -a -m ""
+git push origin
+
+python -m venv venv
+venv\Scripts\activate
+python.exe -m pip install --upgrade pip
+pip install django
+django-admin.exe startproject college .
+-------------------------------------------------------
+
+python manage.py shell
+import django
+django.VERSION 
+
+python --version #cmd
+------------------------------------------------
+
+pip install django-extensions
+python manage.py shell_plus --print-sql
+exit()
+
+pip install Pillow
+python -m pip install django-debug-toolbar
+-------------------------------------------------------
+
+python manage.py startapp network_college
+-templates/network_college
+
+-----------------------------------------------------------
+from django.conf import settings
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
+--------------------------------------------------------------------
