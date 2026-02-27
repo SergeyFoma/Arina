@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django_extensions',
     "debug_toolbar",
 
-    'network_college',
+    'network_college.apps.NetworkCollegeConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
