@@ -5,3 +5,9 @@ def index(request):
 
     }
     return render(request,"network_college/index.html", context)
+
+def about(request):
+    context = {
+
+    }
+    return render(request, 'network_college/about.html', context)
