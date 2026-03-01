@@ -1,0 +1,13 @@
+{%extends "base.html"%}
+
+{%block header%}
+    {{request.user.username}}
+{%endblock%}
+
+{%block sidebar%}
+    <form action=""method='post'>
+        {% csrf_token %}
+        <input type='hidden'name='next'value="{{next}}" />
+        {{form.as_p}}
+    </form>
+{%endblock%}
