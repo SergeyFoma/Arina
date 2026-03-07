@@ -8,10 +8,7 @@
     <form action=""method='post'>
         {% csrf_token %}
         <input type='hidden'name='next'value="{{next}}" />
-            {%for f in form%}
-                <p>{{f.label_tag}}</p>
-                <p>{{f}}</p>
-            {%endfor%}
-        <button type='submit'>Зарегистрироваться</button>
+        {{form.as_p}}
+        <button type='submit'>Авторизация</button>
     </form>
 {%endblock%}
