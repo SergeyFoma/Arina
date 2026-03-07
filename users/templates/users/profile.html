@@ -1,0 +1,10 @@
+<a href="{% url 'users:logout_user' %}">Exit</a>
+<a href="{% url 'admin:index' %}"target='_blank'>admin</a>
+
+<form action=""method='post'>
+    {%csrf_token%}
+    {%for f in form%}
+        <p>{{f}}</p>
+    {%endfor%}
+    <button type='submit'>Обновить профиль</button>
+</form>

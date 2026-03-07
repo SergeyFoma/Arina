@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 #from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from users.models import Profile
 
 class RegisterForm(UserCreationForm):
     username=forms.CharField(label='Login-ppp')
@@ -23,3 +24,12 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model=get_user_model()
         fields=['username', 'password']
+
+class ProfileForm(forms.ModelForm):
+    image = forms.FileField(label='avatar')
+    class Meta:
+        model = Profile
+        #fields = ['username', 'first_name', 'last_name', 'email', 'image']
+        fields = '__all__'
+
+

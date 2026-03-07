@@ -75,4 +75,8 @@ if settings.DEBUG:
 UserCreationForm   https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#:~:text=UserCreationForm
 get_user_model()  https://docs.djangoproject.com/en/6.0/search/?q=get_user_model%28%29&category=
 from django.contrib.auth import get_user_model  https://docs.djangoproject.com/en/6.0/topics/auth/customizing/#:~:text=get_user_model%28%29%20while%20Django
-                    
+
+
+---------------------MEDIA--------------------------------
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'

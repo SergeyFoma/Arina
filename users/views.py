@@ -1,8 +1,8 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from users.forms import RegisterForm, LoginForm
-from django.contrib.auth import authenticate, login
+from users.forms import ProfileForm, RegisterForm, LoginForm
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 
@@ -43,8 +43,16 @@ def login_user(request):
 
 @login_required
 def profile(request):
-    return render(request, "users/profile.html")
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect("users:profile")
+    else:
+        form = ProfileForm()
+    return render(request, "users/profile.html",{'form':form})
 
 
-def logout(request):
-    return render(request, "users/logout.html")
+def logout_user(request):
+    logout(request)
+    return redirect(reverse("network_college:index"))
