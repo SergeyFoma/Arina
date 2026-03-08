@@ -13,7 +13,7 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
-            # print('REGISTER= ', request.user.id)
+            print('REGISTER= ', request.user)
             # Profile.objects.create(user_id=request.user.id)
             return redirect(reverse("users:login_user"))
     else:
@@ -32,8 +32,8 @@ def login_user(request):
         if form.is_valid():
             username=request.POST['username']
             password=request.POST['password']
-            user=authenticate(request, username=username, password=password)
-            print('Authenticated= ', user, user.id)
+            user=authenticate(request, username=username, password=password)            
+            #Profile.objects.create(user_id=user.id)
             if user and user.is_active:
                 login(request,user)
                 return redirect(reverse("users:profile"))
@@ -49,10 +49,21 @@ def login_user(request):
 @login_required
 def profile(request):
     user=request.user
-    print(type(request.user.id))
+    #prof = Profile.objects.get(user=user)
+    # Проверяем существование пользователя и создаём его, если нет
+    user_id, created = Profile.objects.get_or_create(
+        user_id=user.id,
+    )
+    if created:
+    # Установим пароль новому пользователю
+        # user.set_password('secure_password_123')
+        # user.save()
+        print("Пользователь создан!")
+    else:
+        print("Пользователь уже существует!")
+    # if not prof:
+    #     Profile.objects.create(user_id=user.id)
     prof = Profile.objects.get(user=user)
-    print(type(prof.user_id))
-    print(prof)
     
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=user)
