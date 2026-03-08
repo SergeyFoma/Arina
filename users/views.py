@@ -1,9 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from users.forms import ProfileForm, RegisterForm, LoginForm
+from users.forms import UserProfileForm, RegisterForm, LoginForm, UserImageForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from users.models import Profile
+from django.contrib.auth.models import User
 
 
 def register(request):
@@ -43,14 +45,18 @@ def login_user(request):
 
 @login_required
 def profile(request):
+    user=request.user
+    prof = Profile.objects.get(user_id=request.user.id)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
+        form = UserProfileForm(request.POST, instance=user)
+        form_image = UserImageForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("users:profile")
     else:
-        form = ProfileForm()
-    return render(request, "users/profile.html",{'form':form})
+        form = UserProfileForm(instance=user)
+        form_image = UserImageForm()
+    return render(request, "users/profile.html",{'form':form, 'prof':prof, 'form_image':form_image})
 
 
 def logout_user(request):
