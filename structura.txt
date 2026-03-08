@@ -15,6 +15,18 @@
 2. about
         Регистрация - логин, пароль, № группы, № телефона, номер студента
 
+-------------------------Приложение users--------------------
+1. Register
+2. Authorisation (login_user - login())
+3. Profile (User + Profile(one-to-one-field)get_or_create())
+4. logout_user(logout())
+5. смена пароля
+6. восстановлени пароля
+7. регистрация-авторизация через соц.сети, эл.почту, телефона
+
+-------------------Отправка писем и смс---------------------
+
+
 ----------------DB-----------------
 1. Предметы
 2. преподаватели
@@ -80,3 +92,7 @@ from django.contrib.auth import get_user_model  https://docs.djangoproject.com/e
 ---------------------MEDIA--------------------------------
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+---------------Пакеты Джанго---------------
+https://www.djangoproject.com/weblog/2025/nov/02/five-ways-to-discover-django-packages/
