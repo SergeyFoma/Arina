@@ -4,17 +4,23 @@
 <form action=""method='post'enctype='multipart/form-data'>
     {%csrf_token%}
     
-        <p>{{request.user.username}}</p>
-    
-        <img src="{{prof.image.url}}" alt="avatar">
-    
+    <p>{{request.user.username}} - id - {{request.user.id}}</p>
+   
+    {% if prof.image %}
+        <img src="{{prof.image.url}}" alt="avatar"width='150px'height='150px'>
+    {% else %}
+        <h2>Нет аватарки</h2>
+    {% endif %}
+        <p>ID={{prof.user_id}}</p>
+   
 
 
     {%for f in form%}
+        <p>{{f.label_tag}}</p>
         <p>{{f}}</p>
     {%endfor%}
 
     {{form_image}}
-    
+
     <button type='submit'>Обновить профиль</button>
 </form>

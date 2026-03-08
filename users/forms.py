@@ -27,14 +27,16 @@ class LoginForm(AuthenticationForm):
         fields=['username', 'password']
 
 class UserProfileForm(UserChangeForm):
+    password = None
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
 
 class UserImageForm(forms.ModelForm):
-    image = forms.FileField(label='avatar')
+    #user = forms.CharField(widget=forms.ChoiceField())
+    image = forms.FileField(label='avatar', required=False)
     class Meta:
         model = Profile
-        fields = ('image',)
+        fields = ('user','image',)
 
 

@@ -13,10 +13,12 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            # print('REGISTER= ', request.user.id)
+            # Profile.objects.create(user_id=request.user.id)
             return redirect(reverse("users:login_user"))
     else:
         form = RegisterForm()
-        print(form)
+        #print(form)
 
     context = {
         "form": form,
@@ -31,6 +33,7 @@ def login_user(request):
             username=request.POST['username']
             password=request.POST['password']
             user=authenticate(request, username=username, password=password)
+            print('Authenticated= ', user, user.id)
             if user and user.is_active:
                 login(request,user)
                 return redirect(reverse("users:profile"))
@@ -46,16 +49,22 @@ def login_user(request):
 @login_required
 def profile(request):
     user=request.user
-    prof = Profile.objects.get(user_id=request.user.id)
+    print(type(request.user.id))
+    prof = Profile.objects.get(user=user)
+    print(type(prof.user_id))
+    print(prof)
+    
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=user)
-        form_image = UserImageForm(request.POST, request.FILES)
-        if form.is_valid():
+        form_image = UserImageForm(request.POST, request.FILES, instance=prof)
+        if form.is_valid() and form_image.is_valid():
             form.save()
-            return HttpResponseRedirect("users:profile")
+            
+            form_image.save()
+            #return HttpResponseRedirect("users:profile")
     else:
         form = UserProfileForm(instance=user)
-        form_image = UserImageForm()
+        form_image = UserImageForm(instance=prof)
     return render(request, "users/profile.html",{'form':form, 'prof':prof, 'form_image':form_image})
 
 
