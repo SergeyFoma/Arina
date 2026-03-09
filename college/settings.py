@@ -141,10 +141,33 @@ INTERNAL_IPS = [
 ]
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'asdfg2105c@gmail.com'
-EMAIL_HOST_PASSWORD = '21051975cthutq'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+# # Email backend (используем SMTP)
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# # Хост и порт SMTP-сервера Mail.Ru
+# EMAIL_HOST = 'smtp.mail.ru'
+# EMAIL_PORT = 2525  # Альтернативный порт: 465
+
+# # Включаем использование SSL/TLS шифрования
+# EMAIL_USE_SSL = False
+# EMAIL_USE_TLS = True
+
+# # Адрес электронной почты отправителя
+# DEFAULT_FROM_EMAIL = 'your_mail@mail.ru'
+# SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# # Логин и пароль аккаунта Mail.Ru
+# EMAIL_HOST_USER = 'asdfg2105@mail.ru'
+# EMAIL_HOST_PASSWORD = '19752105cthutq'
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST="smtp.yandex.ru"
+EMAIL_PORT=465
+EMAIL_HOST_USER="asdfg2105fomencko@yandex.ru"
+EMAIL_HOST_PASSWORD="qctznmqgnttcgbgs"
+EMAIL_USE_SSL=True
+
+DEFAULT_FROM_EMAIL=EMAIL_HOST_USER
+SERVER_EMAIL=EMAIL_HOST_USER
+EMAIL_ADMIN=EMAIL_HOST_USER

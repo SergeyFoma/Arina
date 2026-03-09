@@ -107,5 +107,5 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
         update_session_auth_hash(self.request, form.user)
         return super().form_valid(form)
 
-# def password_change(request):
-#     return render(request, 'users')
+# def password_reset(request):
+#     return render(request, "users/password_reset.html")

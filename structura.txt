@@ -36,6 +36,10 @@ LoginRequiredMixin - https://docs.djangoproject.com/en/6.0/topics/auth/default/#
 
 
 
+---------------------Восстановление пароля--------------------
+PasswordResetView - https://docs.djangoproject.com/en/6.0/topics/auth/default/#django.contrib.auth.views.PasswordResetView
+
+
 --------------------Forms authenticated and password change----------------
 https://github.com/django/django/blob/stable/6.0.x/django/contrib/auth/forms.py#L514
 
