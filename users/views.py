@@ -7,6 +7,13 @@ from django.contrib.auth.decorators import login_required
 from users.models import Profile
 from django.contrib.auth.models import User
 
+# Импорты для смены пароля
+from django.contrib.auth import update_session_auth_hash #предотвращает принудительный выход пользователя после смены пароля.
+from django.contrib.auth.forms import PasswordChangeForm # встроенная форма в фреймворке Django, предназначенная для обработки запросов на изменение пароля.
+from django.contrib.auth.mixins import LoginRequiredMixin #ограничивает доступ к смене пароля только авторизованными пользователями. Если представление использует этот миксин, все запросы от пользователей, не прошедших аутентификацию, будут перенаправляться на страницу входа или отображаться с ошибкой HTTP 403 Forbidden в зависимости от параметра raise_exception.
+#from django.shortcuts import render, redirect
+from django.views.generic import FormView #Представление, отображающее форму. В случае ошибки повторно отображает форму с ошибками проверки; в случае успешного выполнения перенаправляет на новый URL
+
 
 def register(request):
     if request.method == "POST":
@@ -82,3 +89,23 @@ def profile(request):
 def logout_user(request):
     logout(request)
     return redirect(reverse("network_college:index"))
+
+
+class ChangePasswordView(LoginRequiredMixin, FormView):
+    template_name = 'users/change_password.html'
+    form_class = PasswordChangeForm
+    success_url = '/'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        # Обновляем сессионную аутентификацию, чтобы предотвратить выход пользователя
+        update_session_auth_hash(self.request, form.user)
+        return super().form_valid(form)
+
+# def password_change(request):
+#     return render(request, 'users')

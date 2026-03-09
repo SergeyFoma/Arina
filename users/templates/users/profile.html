@@ -3,6 +3,7 @@
 {% block header %}
     <a href="{% url 'users:logout_user' %}">Exit</a>
     <a href="{% url 'admin:index' %}"target='_blank'>admin</a>
+    <a href="{% url 'users:change_password' %}">Сменить пароль</a>
 {% endblock %}
 
 {% block sidebar %}

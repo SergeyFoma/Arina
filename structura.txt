@@ -27,6 +27,18 @@
 -------------------Отправка писем и смс---------------------
 
 
+
+-------------------Смена пароля------------------------
+PasswordChangeForm - https://docs.djangoproject.com/en/6.0/search/?q=PasswordChangeForm&category=
+update_session_auth_hash - https://docs.djangoproject.com/en/6.0/search/?q=update_session_auth_hash&category=
+FormView - https://docs.djangoproject.com/en/6.0/search/?q=FormView&category=
+LoginRequiredMixin - https://docs.djangoproject.com/en/6.0/topics/auth/default/#django.contrib.auth.mixins.LoginRequiredMixin
+
+
+
+--------------------Forms authenticated and password change----------------
+https://github.com/django/django/blob/stable/6.0.x/django/contrib/auth/forms.py#L514
+
 ----------------DB-----------------
 1. Предметы
 2. преподаватели
