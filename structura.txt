@@ -112,3 +112,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 ---------------Пакеты Джанго---------------
 https://www.djangoproject.com/weblog/2025/nov/02/five-ways-to-discover-django-packages/
+
+
+
+----------------Переопределение модели User----------------------
+------settings.py--------
+AUTH_USER_MODEL = "users.MyUser"

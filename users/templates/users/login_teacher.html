@@ -1,0 +1,15 @@
+{%extends "base.html"%}
+
+{%block header%}
+    {{request.user.username}}
+{%endblock%}
+
+{%block sidebar%}
+    <form action=""method='post'>
+        {% csrf_token %}
+        <input type='hidden'name='next'value="{{next}}" />
+        {{form.as_p}}
+        <button type='submit'>Авторизация</button>
+    </form>
+    <p>Нет личного кабинета? <a href="{% url 'users:register_teacher' %}">Зарегистрируйтесь</a></p>
+{%endblock%}

@@ -6,8 +6,11 @@ from django.contrib.auth import views as auth_views #для смены паро�
 app_name = 'users'
 
 urlpatterns = [
-    path('register/', views.register, name='register'),
-    path('login_user/', views.login_user, name='login_user'),
+    path('register_teacher/', views.register_teacher, name='register_teacher'),
+    path('register_student/', views.register_student, name='register_student'),
+    path('login_teacher/', views.login_teacher, name='login_teacher'),
+    path('login_student/', views.login_student, name='login_student'),
+    path('login_users/', views.login_users, name='login_users'),
     path('profile/', views.profile, name='profile'),
     path('logout_user/', views.logout_user, name='logout_user'),
     path('change_password/', views.ChangePasswordView.as_view(), name='change_password'),

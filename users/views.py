@@ -1,10 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from users.forms import UserProfileForm, RegisterForm, LoginForm, UserImageForm
+from users.forms import RegisterTeacherForm, RegisterStudentForm, LoginForm, ProfileUserStudentForm#, UserImageForm, UserProfileForm,
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from users.models import Profile
+#from users.models import Profile
+from users.models import CustomUser
 from django.contrib.auth.models import User
 
 # Импорты для смены пароля
@@ -15,25 +16,45 @@ from django.contrib.auth.mixins import LoginRequiredMixin #ограничива�
 from django.views.generic import FormView #Представление, отображающее форму. В случае ошибки повторно отображает форму с ошибками проверки; в случае успешного выполнения перенаправляет на новый URL
 
 
-def register(request):
+def register_teacher(request):
     if request.method == "POST":
-        form = RegisterForm(request.POST)
+        form = RegisterTeacherForm(request.POST)
         if form.is_valid():
             form.save()
             print('REGISTER= ', request.user)
             # Profile.objects.create(user_id=request.user.id)
-            return redirect(reverse("users:login_user"))
+            return redirect(reverse("users:login_teacher"))
     else:
-        form = RegisterForm()
+        form = RegisterTeacherForm()
         #print(form)
 
     context = {
         "form": form,
     }
-    return render(request, "users/register.html", context)
+    return render(request, "users/register_teacher.html", context)
+
+def register_student(request):
+    if request.method == "POST":
+        form = RegisterStudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            print('REGISTER= ', request.user)
+            # Profile.objects.create(user_id=request.user.id)
+            return redirect(reverse("users:login_student"))
+    else:
+        form = RegisterStudentForm()
+        #print(form)
+
+    context = {
+        "form": form,
+    }
+    return render(request, "users/register_teacher.html", context)
+
+def login_users(request):
+    return render(request, "users/login_users.html")
 
 
-def login_user(request):
+def login_teacher(request):
     if request.method == "POST":
         form = LoginForm(data=request.POST)
         if form.is_valid():
@@ -50,40 +71,59 @@ def login_user(request):
         'form':form,
     }
 
-    return render(request, "users/login_user.html", context)
+    return render(request, "users/login_teacher.html", context)
+
+def login_student(request):
+    if request.method == "POST":
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            username=request.POST['username']
+            password=request.POST['password']
+            user=authenticate(request, username=username, password=password)            
+            #Profile.objects.create(user_id=user.id)
+            if user and user.is_active:
+                login(request,user)
+                return redirect(reverse("users:profile"))
+    else:
+        form = LoginForm() 
+    context={
+        'form':form,
+    }
+
+    return render(request, "users/login_student.html", context)
 
 
 @login_required
 def profile(request):
     user=request.user
-    #prof = Profile.objects.get(user=user)
+    prof = CustomUser.objects.get(username=user.username)
     # Проверяем существование пользователя и создаём его, если нет
-    user_id, created = Profile.objects.get_or_create(
-        user_id=user.id,
-    )
-    if created:
-    # Установим пароль новому пользователю
-        # user.set_password('secure_password_123')
-        # user.save()
-        print("Пользователь создан!")
-    else:
-        print("Пользователь уже существует!")
-    # if not prof:
-    #     Profile.objects.create(user_id=user.id)
-    prof = Profile.objects.get(user=user)
+    # user_id, created = CustomUser.objects.get_or_create(
+    #     user_id=user.id,
+    # )
+    # if created:
+    # # Установим пароль новому пользователю
+    #     # user.set_password('secure_password_123')
+    #     # user.save()
+    #     print("Пользователь создан!")
+    # else:
+    #     print("Пользователь уже существует!")
+    # # if not prof:
+    # #     Profile.objects.create(user_id=user.id)
+    # prof = CustomUser.objects.get(username=user.username)
     
     if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=user)
-        form_image = UserImageForm(request.POST, request.FILES, instance=prof)
-        if form.is_valid() and form_image.is_valid():
+        form = ProfileUserStudentForm(request.POST, request.FILES, instance=user)
+        #form_image = UserImageForm(request.POST, request.FILES, instance=prof)
+        if form.is_valid():# and form_image.is_valid():
             form.save()
             
-            form_image.save()
+            #form_image.save()
             #return HttpResponseRedirect("users:profile")
     else:
-        form = UserProfileForm(instance=user)
-        form_image = UserImageForm(instance=prof)
-    return render(request, "users/profile.html",{'form':form, 'prof':prof, 'form_image':form_image})
+        form = ProfileUserStudentForm(instance=user)
+        #form_image = UserImageForm(instance=prof)
+    return render(request, "users/profile.html",{'form':form, 'prof':prof,})# 'form_image':form_image})
 
 
 def logout_user(request):
