@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block sidebar %}
+
+Status - {{request.user.status_user}}  Gruppa - {{request.user.gruppa}}
 <form action=""method='post'enctype='multipart/form-data'>
     {%csrf_token%}
    
