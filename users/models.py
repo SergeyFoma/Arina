@@ -3,20 +3,24 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
-from network_college.models import Status
+#from network_college.models import Status
 
-
+CHOICES = [
+    ('student', 'Студент'),
+    ('teacher', 'Преподаватель'),
+    ('admin', 'Администратор'),
+]
 class CustomUser(AbstractUser):
     image = models.ImageField(upload_to='avatar/%Y/%m/%d', 
                 blank=True, null=True, verbose_name='Avatar')
-    status = models.CharField(max_length=150, blank=True, null=True, 
+    status = models.CharField(max_length=150, choices = CHOICES, default = 'status', blank=True, null=True, 
                 verbose_name='Статус')
     middle_name = models.CharField(max_length=150, blank=True, null=True, 
                 verbose_name='Отчество')
     gruppa = models.CharField(max_length=150, blank=True, null=True, 
                 verbose_name='Группа')
-    number = models.IntegerField(verbose_name="Личный номер студента", blank=True, null=True,)
-    status_user = models.ForeignKey(Status, on_delete=models.PROTECT, blank=True, null=True)
+    number = models.IntegerField(verbose_name="Личный номер", blank=True, null=True,)
+    #status_user = models.ForeignKey(Status, on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
         verbose_name = "Пользователь"

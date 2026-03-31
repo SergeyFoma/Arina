@@ -9,7 +9,7 @@
         {% csrf_token %}
         <input type='hidden'name='next'value="{{next}}" />
         {{form.as_p}}
-        <button type='submit'>Авторизация</button>
+        <button type='submit'>Зарегистрироваться</button>
     </form>
-    <p>Нет личного кабинета? <a href="{% url 'users:register_user' %}">Зарегистрируйтесь</a></p>
+    
 {%endblock%}

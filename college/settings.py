@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
 
     'network_college.apps.NetworkCollegeConfig',
+    'admin_college.apps.AdminCollegeConfig',
     'users.apps.UsersConfig',
 ]
 
