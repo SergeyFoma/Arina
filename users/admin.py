@@ -5,13 +5,13 @@ from .models import CustomUser
 #admin.site.register(CustomUser, UserAdmin)
 class CustomUserAdmin(UserAdmin):
     # Добавьте ваши новые поля в список отображаемых в общем списке
-    list_display = UserAdmin.list_display + ('image','middle_name', 'status', 'gruppa', 'number', 'status_user')
+    list_display = UserAdmin.list_display + ('image','middle_name', 'status', 'gruppa', 'number')#, 'status_user')
 
     # Добавьте ваши поля в формы создания и редактирования
     # fieldsets — для редактирования существующего пользователя
     fieldsets = UserAdmin.fieldsets + (
         ('Дополнительная информация', {
-            'fields': ('image','middle_name', 'status', 'gruppa', 'number', 'status_user'),
+            'fields': ('image','middle_name', 'status', 'gruppa', 'number')#, 'status_user'),
         }),
     )
 
@@ -19,7 +19,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = UserAdmin.add_fieldsets + (
         (None, {
             'classes': ('wide',),
-            'fields': ('image','middle_name', 'status', 'gruppa', 'number', 'status_user'), # Добавьте поля, которые нужны при создании
+            'fields': ('image','middle_name', 'status', 'gruppa', 'number')#, 'status_user'), # Добавьте поля, которые нужны при создании
         }),
     )
 
