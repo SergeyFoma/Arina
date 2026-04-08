@@ -1,6 +1,8 @@
 {%extends "base.html"%}
 
 {%block header%}
+<a href="{% url 'admin_college:check' %}">Войти как Преподаватель</a>
+<a href="{% url 'users:login_users' %}">Войти как Студент</a>
 {%endblock%}
 
 {%block sidebar%}

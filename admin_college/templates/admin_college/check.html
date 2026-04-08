@@ -2,4 +2,15 @@
 
 {% block sidebar %}
     Введите верификационный номер
+    <form action=""method='get'>
+        <input type="text"name='check'id='number'value=''>
+        <button type='submit'>Check</button>
+    </form>
+<h1>{{te}}</h1>
+<h1>{{vv}}</h1>
+{%if vv in te%}
+    <h2>Yes {{vv}}</h2>
+    <a href="{% url 'users:login_users' %}">Login</a>
+{%endif%}
+    
 {% endblock %}
