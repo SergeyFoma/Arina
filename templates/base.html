@@ -17,7 +17,7 @@
         {%else%}
             <h2>{{request.user.username}}, {{request.user.status}}</h2>
             <a href="{% url 'users:logout_user' %}">Выйти</a>
-            <a href="{% url 'users:profile' %}">Profile</a>
+            <a href="{% url 'users:profile' %}">Личный кабинет</a>
         {%endif%}
     </div>
     <div class="sidebar">
