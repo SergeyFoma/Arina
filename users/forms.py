@@ -6,22 +6,23 @@ from django.contrib.auth import get_user_model
 #from django.contrib.auth.models import User
 
 CHOICES = [
-    ('status','Status'),
+    ('-----','-----'),
     ('student', 'Студент'),
     ('teacher', 'Преподаватель'),
     ('admin', 'Администратор'),
 ]
 class RegisterForm(UserCreationForm):
     username=forms.CharField(label='Login-ppp')
-    status=forms.ChoiceField(label='Status', choices = CHOICES, widget = forms.Select(attrs={'class':'form-input'}))
+    status=forms.ChoiceField(label='Выберите свой вариант', choices = CHOICES, widget = forms.Select(attrs={'class':'form-input'}),required=True)
     middle_name = forms.CharField(label='Отчество',required=False)
+    gruppa = forms.CharField(label='Группа', widget=forms.TextInput(attrs={'class':"form-input"}), required=True)
     password1=forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={"class":"form-input"}))
     password2=forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={"class":"form-input"}))
-    number = forms.CharField(label = 'Верификационный номер')
+    #number = forms.CharField(label = 'Верификационный номер')
 
     class Meta:
         model = get_user_model()
-        fields=['username','status', 'last_name','first_name', 'middle_name', 'email', 'gruppa', 'number',  'password1', 'password2']
+        fields=['username','status', 'last_name','first_name', 'middle_name', 'email', 'gruppa',  'password1', 'password2']
         labels={
             'email':'Email',
             'first_name':'Имя',

@@ -23,7 +23,7 @@ def register_user(request):
             form.save()
             print('REGISTER= ', request.user)
             # Profile.objects.create(user_id=request.user.id)
-            return redirect(reverse("users:login_user"))
+            return redirect(reverse("users:login_users"))
     else:
         form = RegisterForm()
         #print(form)
