@@ -27,7 +27,7 @@ def check(request):
     if request.method=='POST':
         #check = request.POST.get('check','')
         #print(check)
-        code = request.POST.get('invite_code')
+        code = request.POST.get('check','')
         print(code)
         try:
             # select_for_update блокирует запись до конца транзакции
@@ -35,6 +35,11 @@ def check(request):
                 teacher = Teacher.objects.select_for_update().get(invite_code=code, is_active=True)
                 # Код найден и активен. Помечаем его как использованный.
                 teacher.use_code()
+
+                teacher.is_active = False
+                teacher.save()
+
+                #return "Активация прошла успешно"
                 
                 # Здесь создаете пользователя, так как код валиден
                 # ... ваша логика создания пользователя ...

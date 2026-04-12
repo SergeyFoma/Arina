@@ -26,6 +26,10 @@ import secrets
 #             self.verification_number=veri()
 #         super().save(*args, **kwargs)
 
+# def generate_code(self):
+#         """Генерирует уникальный код."""
+#         self.invite_code = secrets.token_urlsafe(16) # Генерирует безопасную строку
+#         print('Code: ',self.invite_code)
 class Teacher(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя',blank=True, null=True)
     middle_name = models.CharField(max_length=100, verbose_name='Отчество',blank=True, null=True)
@@ -37,7 +41,8 @@ class Teacher(models.Model):
         unique=True,
         help_text="Уникальный код для регистрации",
         blank=True, 
-        null=True
+        null=True,
+        #default=generate_code
     )
     is_active = models.BooleanField(
         default=True,
@@ -51,9 +56,27 @@ class Teacher(models.Model):
         help_text="Время, когда код был использован",
     )
 
-    def generate_code(self):
-        """Генерирует уникальный код."""
-        self.invite_code = secrets.token_urlsafe(16) # Генерирует безопасную строку
+    # def generate_code(self):
+    #     # Генерируем URL-безопасный токен (32 байта -> 43 символа в base64url)
+    #     self.token = secrets.token_urlsafe(32)
+    #     self.save()
+
+    def save(self, *args, **kwargs):
+        # Генерируем токен только если он ещё не задан (например, при создании)
+        if not self.invite_code:
+            self.invite_code = secrets.token_urlsafe(8)
+            # В редких случаях коллизии можно добавить цикл, но для 32 байт это почти невозможно
+        super().save(*args, **kwargs)
+
+    # def generate_code(self):
+    #     """Генерирует уникальный код."""
+    #     self.invite_code = secrets.token_urlsafe(16) # Генерирует безопасную строку
+    #     print('Code: ',self.invite_code)
+
+    # def save(self, *args, **kwargs):
+    #     if not self.invite_code:
+    #         self.invite_code=generate_code()
+    #     super().save(*args, **kwargs)
     
     def use_code(self):
         """
