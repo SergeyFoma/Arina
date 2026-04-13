@@ -5,7 +5,7 @@ from users.forms import RegisterForm, LoginForm, ProfileUserForm#, UserImageForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 #from users.models import Profile
-from users.models import CustomUser
+from users.models import CustomUser, Group
 from django.contrib.auth.models import User
 
 # Импорты для смены пароля
@@ -32,6 +32,53 @@ def register_user(request):
         "form": form,
     }
     return render(request, "users/register_user.html", context)
+
+from .forms import  StudentRegistrationForm, TeacherRegistrationForm ,RoleSelectionForm
+
+def select_role(request):
+    if request.method == 'POST':
+        form = RoleSelectionForm(request.POST)
+        if form.is_valid():
+            role = form.cleaned_data['role']
+            if role == 'student':
+                return redirect('users:register_student')
+            elif role == 'teacher':
+                return redirect('users:register_teacher')
+    else:
+        form = RoleSelectionForm()
+    return render(request, 'users/select_role.html', {'form': form})
+
+def register_student(request):
+    if request.method == 'POST':
+        form = StudentRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.role = 'student'
+            user.set_password(form.cleaned_data['password1'])
+            group_number = form.cleaned_data['group_number']
+            group, _ = Group.objects.get_or_create(number=group_number)
+            user.group = group
+            user.save()
+            return redirect('users:login_users')
+    else:
+        form = StudentRegistrationForm()
+    return render(request, 'users/register_student.html', {'form': form})
+
+def register_teacher(request):
+    if request.method == 'POST':
+        form = TeacherRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.role = 'teacher'
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            # Сохраняем связь с группами
+            user.groups_as_teacher.set(form.cleaned_data['groups'])
+            return redirect('users:login_users')
+    else:
+        form = TeacherRegistrationForm()
+    return render(request, 'users/register_teacher.html', {'form': form})
+
 
 
 
