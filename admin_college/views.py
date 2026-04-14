@@ -44,10 +44,11 @@ def check(request):
                 # Здесь создаете пользователя, так как код валиден
                 # ... ваша логика создания пользователя ...
                 
-                return redirect('users:register_user')
+                return redirect('users:select_role')
                 
         except Teacher.DoesNotExist:
             # Код не найден или уже неактивен
+            messages.success(request, 'Не верный номер')
             return redirect('admin_college:check')
         
         # te=[]

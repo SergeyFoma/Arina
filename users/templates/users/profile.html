@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 
 {% block header %}
-    <a href="{% url 'users:logout_user' %}">Exit</a>
+    {%if request.user.is_superuser == True%}
     <a href="{% url 'admin:index' %}"target='_blank'>admin</a>
-    <a href="{% url 'users:change_password' %}">Сменить пароль</a>
+    {%endif%}
+    
 {% endblock %}
 
 {% block sidebar %}
 
-Status - {{request.user.status}}  Gruppa - {{request.user.gruppa}}
+Status - {{request.user.status}}  {% if request.user.group_as_student %}Gruppa -{{request.user.group_as_student.number}}{%endif%}{%if request.user.group_as_teacher%}Gruppa -{{request.user.group_as_teacher.number}}{%endif%}
 <form action=""method='post'enctype='multipart/form-data'>
     {%csrf_token%}
    
@@ -27,4 +28,6 @@ Status - {{request.user.status}}  Gruppa - {{request.user.gruppa}}
 
     <button type='submit'>Обновить профиль</button>
 </form>
+<h2>Хотите сменить пароль, перейдите по ссылке ---->>>
+<a href="{% url 'users:change_password' %}">Сменить пароль</a></h2>
 {% endblock %}

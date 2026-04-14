@@ -30,6 +30,39 @@ class RegisterForm(UserCreationForm):
         }
 
 
+from .models import Group, CustomUser
+
+class RoleSelectionForm(forms.Form):
+    ROLE_CHOICES = [
+        ('student', 'Студент'),
+        ('teacher', 'Преподаватель'),
+    ]
+    role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect)
+
+class StudentRegistrationForm(forms.ModelForm):
+    group_number = forms.CharField(max_length=10, label="Номер группы")
+    #status=forms.ChoiceField(label='Выберите свой вариант', choices = CHOICES, widget = forms.Select(attrs={'class':'form-input'}),required=True)
+    password1=forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={"class":"form-input"}))
+    password2=forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={"class":"form-input"}))
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password1', 'password2', 'group_number']
+
+class TeacherRegistrationForm(forms.ModelForm):
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True,
+        label="Группы"
+    )
+    password2=forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={"class":"form-input"}))
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password','password2', 'groups']
+
+
    
 
 class LoginForm(AuthenticationForm):
@@ -58,14 +91,14 @@ class LoginForm(AuthenticationForm):
 class ProfileUserForm(forms.ModelForm):
     username=forms.CharField(label="Login",widget=forms.TextInput(attrs={'class':'form-input'}))
     email=forms.CharField(required=False, label="Email",widget=forms.TextInput(attrs={'class':'form-input'}))
-    status = forms.CharField(disabled=True, label="Статус",widget=forms.TextInput(attrs={'class':'form-input'}))
+    #status = forms.CharField(disabled=True, label="Статус",widget=forms.TextInput(attrs={'class':'form-input'}))
     middle_name = forms.CharField(label='Отчество')
-    gruppa = forms.CharField(disabled=True, label='Группа')
+    #gruppa = forms.CharField(disabled=True, label='Группа')
     #status_user = forms.CharField(disabled=True, label="Статус пользователя",widget=forms.TextInput(attrs={'class':'form-input'}))
 
     class Meta:
         model = get_user_model()
-        fields=['image','username','email','status','first_name','last_name', 'middle_name', 'gruppa']#, 'status_user']
+        fields=['image','username','email','first_name', 'middle_name','last_name','group_as_student','groups_as_teacher']#, 'status_user']
         labels={
             'first_name':'Имя',
             'last_name':'Фамилия',
@@ -75,7 +108,7 @@ class ProfileUserForm(forms.ModelForm):
             'first_name':forms.TextInput(attrs={'class':'form-input'}),
             'last_name':forms.TextInput(attrs={'class':'form-input'}),
             'middle_name':forms.TextInput(attrs={'class':'form-input'}),
-            'gruppa':forms.TextInput(attrs={'class':'form-input'}),
+            #'gruppa':forms.TextInput(attrs={'class':'form-input'}),
         }
 
 

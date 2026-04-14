@@ -8,3 +8,4 @@ from .models import Teacher
 
 class TeacherAdmin(admin.ModelAdmin):
     list_display=['name', 'middle_name', 'first_name', 'invite_code', 'is_active', 'used_at']
+    readonly_fields = ('invite_code',)
