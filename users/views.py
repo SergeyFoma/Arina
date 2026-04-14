@@ -37,9 +37,11 @@ from .forms import  StudentRegistrationForm, TeacherRegistrationForm ,RoleSelect
 
 def select_role(request):
     if request.method == 'POST':
+        #print(request.POST.get('role',''))
         form = RoleSelectionForm(request.POST)
         if form.is_valid():
             role = form.cleaned_data['role']
+            print('Role: ', role)
             if role == 'student':
                 return redirect('users:register_student')
             elif role == 'teacher':
@@ -50,15 +52,23 @@ def select_role(request):
 
 def register_student(request):
     if request.method == 'POST':
+        #print(request.POST.get('role',''))
         form = StudentRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.role = 'student'
             user.set_password(form.cleaned_data['password1'])
+            #user.status(form.cleaned_data[user.role])
             group_number = form.cleaned_data['group_number']
+            print(group_number)
+            #group_object = Group.objects.get(code=group_code)
             group, _ = Group.objects.get_or_create(number=group_number)
             user.group = group
+            #user.group_as_student=form.cleaned_data['group_as_student']
+            #print(group_as_student)
+            user.group_as_student = group
             user.save()
+            print(user.group)
             return redirect('users:login_users')
     else:
         form = StudentRegistrationForm()

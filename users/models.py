@@ -12,16 +12,17 @@ class Group(models.Model):
     
 
 
-CHOICES = [
-    ('student', 'Студент'),
-    ('teacher', 'Преподаватель'),
-    ('admin', 'Администратор'),
-]
+# CHOICES = [
+#     ('student', 'Студент'),
+#     ('teacher', 'Преподаватель'),
+#     ('admin', 'Администратор'),
+# ]
 class CustomUser(AbstractUser):
     image = models.ImageField(upload_to='avatar/%Y/%m/%d', 
                 blank=True, null=True, verbose_name='Avatar')
-    status = models.CharField(max_length=150, choices = CHOICES, default = 'status', blank=True, null=True, 
-                verbose_name='Статус')
+    # status = models.CharField(max_length=150, choices = CHOICES, default = 'status', blank=True, null=True, 
+    #             verbose_name='Статус')
+    status = models.CharField(max_length=150, blank=True,null=True)
     middle_name = models.CharField(max_length=150, blank=True, null=True, 
                 verbose_name='Отчество')
     # gruppa = models.CharField(max_length=150, blank=True, null=True, 

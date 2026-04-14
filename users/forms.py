@@ -39,15 +39,22 @@ class RoleSelectionForm(forms.Form):
     ]
     role = forms.ChoiceField(choices=ROLE_CHOICES, widget=forms.RadioSelect)
 
+group_num=Group.objects.all()
+GROUP_CHOICES=[]
+for i in group_num:
+    GROUP_CHOICES.append((i,i))
 class StudentRegistrationForm(forms.ModelForm):
-    group_number = forms.CharField(max_length=10, label="Номер группы")
+    group_number = forms.ChoiceField( label="Номер группы", choices=GROUP_CHOICES)
+    #group_number = forms.CharField(label='numb')
+    group_as_student = forms.ChoiceField( label="Номер группы", choices=GROUP_CHOICES)
     #status=forms.ChoiceField(label='Выберите свой вариант', choices = CHOICES, widget = forms.Select(attrs={'class':'form-input'}),required=True)
+    status = forms.CharField(initial = 'Студент')
     password1=forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={"class":"form-input"}))
-    password2=forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={"class":"form-input"}))
+    password2=forms.CharField(label='Повтор пароля' , widget=forms.PasswordInput(attrs={"class":"form-input"}))
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password1', 'password2', 'group_number']
+        fields = ['username', 'password1', 'password2', 'group_number', 'status']
 
 class TeacherRegistrationForm(forms.ModelForm):
     groups = forms.ModelMultipleChoiceField(
@@ -56,11 +63,12 @@ class TeacherRegistrationForm(forms.ModelForm):
         required=True,
         label="Группы"
     )
+    status = forms.CharField(initial = 'Преподаватель')
     password2=forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={"class":"form-input"}))
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password','password2', 'groups']
+        fields = ['username', 'password','password2', 'groups', 'status']
 
 
    
