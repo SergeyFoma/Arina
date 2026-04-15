@@ -71,6 +71,7 @@ class TeacherRegistrationForm(forms.ModelForm):
         fields = ['username', 'password','password2', 'groups', 'status']
 
 
+
    
 
 class LoginForm(AuthenticationForm):
@@ -105,12 +106,13 @@ class ProfileUserForm(forms.ModelForm):
     #status_user = forms.CharField(disabled=True, label="Статус пользователя",widget=forms.TextInput(attrs={'class':'form-input'}))
 
     class Meta:
-        model = get_user_model()
+        model = get_user_model()        
         fields=['image','username','email','first_name', 'middle_name','last_name','group_as_student','groups_as_teacher']#, 'status_user']
         labels={
             'first_name':'Имя',
             'last_name':'Фамилия',
             'middle_name':'Отчество',
+            'group_as_student':'Студент'
         }
         widgets={
             'first_name':forms.TextInput(attrs={'class':'form-input'}),
@@ -118,6 +120,42 @@ class ProfileUserForm(forms.ModelForm):
             'middle_name':forms.TextInput(attrs={'class':'form-input'}),
             #'gruppa':forms.TextInput(attrs={'class':'form-input'}),
         }
+
+    # def __init__(self, *args, **kwargs):
+    #     # Вызываем родительский конструктор
+    #     super().__init__(*args, **kwargs)
+        
+        # Проверяем, есть ли у формы данные (для валидации POST) или это новый объект.
+        # self.instance.pk существует, если мы редактируем существующего пользователя.
+        # if self.instance and self.instance.pk:
+        #     # Проверяем статус пользователя
+            # if self.instance.status == 'Студент':
+            #     # Если студент - скрываем поле для преподавателей
+            #     self.fields['groups_as_teacher'].widget = forms.HiddenInput()
+            #     self.fields['groups_as_teacher'].required = False
+                
+            # elif self.instance.status == 'Преподаватель':
+            #     # Если преподаватель - скрываем поле для студентов
+            #     self.fields['group_as_student'].widget = forms.HiddenInput()
+            #     self.fields['group_as_student'].required = False
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Проверяем, что форма привязана к существующему объекту в БД
+        if self.instance and self.instance.pk:
+            # Если пользователь - студент, удаляем поле для преподавателей
+            if self.instance.status == 'Студент':
+                if 'groups_as_teacher' in self.fields:
+                    del self.fields['groups_as_teacher']
+                if 'group_as_student' in self.fields:
+                    del self.fields['group_as_student']
+            
+            # Если пользователь - преподаватель, удаляем поле для студентов
+            elif self.instance.status == 'Преподаватель':
+                if 'group_as_student' in self.fields:
+                    del self.fields['group_as_student']
+                
 
 
 

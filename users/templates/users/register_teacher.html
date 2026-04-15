@@ -1,5 +1,7 @@
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
+  {{ form_group.as_p }}
   <button type="submit">Зарегистрироваться</button>
 </form>
+

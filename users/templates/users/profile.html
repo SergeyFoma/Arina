@@ -9,7 +9,13 @@
 
 {% block sidebar %}
 
-Status - {{request.user.status}}  {% if request.user.group_as_student %}Gruppa -{{request.user.group_as_student.number}}{%endif%}{%if request.user.group_as_teacher%}Gruppa -{{request.user.group_as_teacher.number}}{%endif%}
+{%if request.user.status == 'Преподаватель'%}
+    {%for g in groups%}
+       <p>Группы: {{g}}</p>
+    {%endfor%}
+{%endif%}
+
+Статус: {{request.user.status}}  {% if request.user.group_as_student %}Группа: {{request.user.group_as_student.number}}{%endif%}
 <form action=""method='post'enctype='multipart/form-data'>
     {%csrf_token%}
    
@@ -30,4 +36,10 @@ Status - {{request.user.status}}  {% if request.user.group_as_student %}Gruppa -
 </form>
 <h2>Хотите сменить пароль, перейдите по ссылке ---->>>
 <a href="{% url 'users:change_password' %}">Сменить пароль</a></h2>
+
+{%if request.user.status == 'Студент'%}
+Расписание для студентов
+{%elif request.user.status == 'Преподаватель'%}
+Расписание для преподавателя
+{%endif%}
 {% endblock %}

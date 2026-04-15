@@ -33,7 +33,7 @@ def register_user(request):
     }
     return render(request, "users/register_user.html", context)
 
-from .forms import  StudentRegistrationForm, TeacherRegistrationForm ,RoleSelectionForm
+from users.forms import  StudentRegistrationForm, TeacherRegistrationForm ,RoleSelectionForm
 
 def select_role(request):
     if request.method == 'POST':
@@ -77,16 +77,21 @@ def register_student(request):
 def register_teacher(request):
     if request.method == 'POST':
         form = TeacherRegistrationForm(request.POST)
+        
         if form.is_valid():
             user = form.save(commit=False)
             user.role = 'teacher'
             user.set_password(form.cleaned_data['password'])
             user.save()
             # Сохраняем связь с группами
-            user.groups_as_teacher.set(form.cleaned_data['groups'])
+            #user.groups_as_teacher.set(form.cleaned_data['groups'])
+            # Вместо user.groups_as_teacher.set(form.cleaned_data['groups'])
+            selected_group_ids = request.POST.getlist('groups') # 'groups' - это name поля в форме
+            user.groups_as_teacher.set(selected_group_ids)
             return redirect('users:login_users')
     else:
         form = TeacherRegistrationForm()
+        
     return render(request, 'users/register_teacher.html', {'form': form})
 
 
@@ -119,6 +124,7 @@ def login_user(request):
 def profile(request):
     user=request.user
     prof = CustomUser.objects.get(username=user.username)
+    groups = user.groups_as_teacher.all()
     # Проверяем существование пользователя и создаём его, если нет
     # user_id, created = CustomUser.objects.get_or_create(
     #     user_id=user.id,
@@ -142,10 +148,11 @@ def profile(request):
             
             #form_image.save()
             #return HttpResponseRedirect("users:profile")
+            return redirect('users:profile')
     else:
         form = ProfileUserForm(instance=user)
         #form_image = UserImageForm(instance=prof)
-    return render(request, "users/profile.html",{'form':form, 'prof':prof,})# 'form_image':form_image})
+    return render(request, "users/profile.html",{'form':form, 'prof':prof, 'groups': groups})# 'form_image':form_image})
 
 
 def logout_user(request):

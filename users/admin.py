@@ -37,3 +37,5 @@ admin.site.register(CustomUser, CustomUserAdmin)
 # @admin.register(CustomUser)
 # class CustomUserAdmin(admin.ModelAdmin):
 #     list_display = ['username', 'image', 'first_name','last_name','middle_name', 'status', 'email']
+
+
