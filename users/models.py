@@ -10,6 +10,30 @@ class Group(models.Model):
     def __str__(self):
         return self.number
     
+# Предмет
+class Subject(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+# График
+class Schedule(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='schedules')
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    date = models.DateField()
+
+    def __str__(self):
+        return f"{self.date} | {self.subject} | {self.group}"
+
+# Назначение 
+class Assignment(models.Model):
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, related_name='assignments')
+    topic = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.topic
+    
 
 
 # CHOICES = [
@@ -42,7 +66,13 @@ class CustomUser(AbstractUser):
         return self.username
     
 
+class Grade(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='grades')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    value = models.IntegerField()  # например, 1-5
 
+    def __str__(self):
+        return f"{self.student} — {self.value}"
 
 
 # class Profile(models.Model):
@@ -55,3 +85,13 @@ class CustomUser(AbstractUser):
 #         return self.user.username
     
 
+'''
+    Логика связей:
+
+Student → Group: Ученик состоит в одной группе.
+Group → Schedule: У группы есть расписание занятий.
+Schedule → Subject: Каждое занятие относится к предмету.
+Schedule → Assignment: На занятии могут быть задания.
+Assignment → Grade: За задание выставляются оценки.
+Grade → Student: Оценка принадлежит конкретному студенту.
+'''

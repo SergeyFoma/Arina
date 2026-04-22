@@ -1,11 +1,11 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from users.forms import RegisterForm, LoginForm, ProfileUserForm#, UserImageForm, UserProfileForm,
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 #from users.models import Profile
-from users.models import CustomUser, Group
+from users.models import CustomUser, Grade, Group
 from django.contrib.auth.models import User
 
 # Импорты для смены пароля
@@ -178,3 +178,24 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
 
 # def password_reset(request):
 #     return render(request, "users/password_reset.html")
+
+@login_required
+def diary_data(request):
+    """API-эндпоинт для получения оценок студента в формате JSON"""
+    student = request.user
+
+    # Получаем оценки студента с нужными связями (оптимизация запросов)
+    grades_qs = Grade.objects.filter(student=student).select_related(
+        'assignment__schedule__subject'
+    )
+    
+    data = []
+    for grade in grades_qs:
+        data.append({
+            'date': grade.assignment.schedule.date.strftime('%d.%m.%Y'),
+            'subject': grade.assignment.schedule.subject.name,
+            'value': grade.value,
+            'topic': grade.assignment.topic,
+        })
+    
+    return JsonResponse({'grades': data})

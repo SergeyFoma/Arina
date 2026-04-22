@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Group
+from .models import *
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
@@ -39,3 +39,18 @@ admin.site.register(CustomUser, CustomUserAdmin)
 #     list_display = ['username', 'image', 'first_name','last_name','middle_name', 'status', 'email']
 
 
+@admin.register(Subject)
+class SubjectAdmin(admin.ModelAdmin):
+    list_display=['name',]
+
+@admin.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display=['group', 'subject', 'date']
+
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display=['schedule', 'topic']
+
+@admin.register(Grade)
+class GradeAdmin(admin.ModelAdmin):
+    list_display=['assignment', 'student', 'value']

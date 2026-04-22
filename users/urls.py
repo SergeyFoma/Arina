@@ -38,4 +38,6 @@ urlpatterns = [
      path('select-role/', views.select_role, name='select_role'),
      path('register/student/', views.register_student, name='register_student'),
      path('register/teacher/', views.register_teacher, name='register_teacher'),
+
+     path('api/diary/', views.diary_data, name='diary_data'),
 ]
