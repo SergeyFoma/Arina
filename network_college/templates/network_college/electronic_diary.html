@@ -1,0 +1,109 @@
+{%extends "base.html"%}
+
+{%block header%}
+{{request.user}}{{request.user.status}}
+{%endblock%}
+
+{%block sidebar%}
+
+<h2>Электронный дневник</h2>
+<div id="notification" style="display:none; position:fixed; top:20px; right:20px; background:#fff; border:1px solid #000; padding:10px;">
+  <p id="topic"></p>
+</div>
+<table id="diary-table" border="1" style="width:100%; border-collapse:collapse;">
+  <tr>
+    <th>Дата</th>
+    <th>Предмет</th>
+    <th>Оценка</th>
+  </tr>
+</table> 
+
+<style>
+        /* Стиль для ячеек с оценками */
+        .grade-cell {
+            cursor: pointer; /* Меняем курсор на "руку" */
+            color: blue;    /* Дополнительно: выделим оценки синим */
+            font-weight: bold;
+        }
+        
+        /* Базовая стилизация таблицы для красоты */
+        #diary-table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        #diary-table th, #diary-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+    </style>
+
+
+
+<script>
+  // Скрипт для загрузки данных и обработки кликов
+//Загрузка данных из Django (AJAX)
+// Весь ваш JS-код должен быть внутри этой функции
+// Весь ваш JS-код должен быть внутри этой функции
+document.addEventListener('DOMContentLoaded', function() {
+
+  // --- ИСПРАВЛЕНИЕ 1: Правильный URL для fetch ---
+  // Замените 'diary' на имя вашего приложения, если оно отличается!
+  fetch("{% url 'network_college:diary_data' %}") 
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Ошибка сети или сервера");
+        }
+        return response.json();
+    })
+    .then(data => {
+      // --- ИСПРАВЛЕНИЕ 2: Ищем саму таблицу, а не tbody ---
+      const diaryTable = document.querySelector('#diary-table'); 
+      
+      data.grades.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.date}</td>
+          <td>${item.subject}</td>
+          <td class="grade-cell" data-topic="${item.topic}">${item.value}</td>
+        `;
+        // Добавляем строку в таблицу напрямую
+        diaryTable.appendChild(row); 
+      });
+    })
+    .catch(error => {
+      console.error("Ошибка при загрузке данных дневника:", error);
+    });
+
+
+  // --- ИСПРАВЛЕНИЕ 3: Делегирование событий ---
+  // Находим таблицу. Код ждет загрузки DOM, так что элемент будет найден.
+  const diaryContainer = document.querySelector('#diary-table');
+
+  if (diaryContainer) {
+    diaryContainer.addEventListener('click', function(event) {
+      // closest() ищет ближайший родительский элемент с классом .grade-cell
+      // Это работает, даже если кликнули на текст внутри <td>
+      const targetCell = event.target.closest('.grade-cell'); 
+
+      if (targetCell) {
+        const topic = targetCell.getAttribute('data-topic');
+        const notification = document.getElementById('notification');
+        
+        if (notification) {
+          document.getElementById('topic').innerText = 'Тема: ' + topic;
+          notification.style.display = 'block';
+          setTimeout(() => {
+            notification.style.display = 'none';
+          }, 10000);
+        }
+      }
+    });
+  }
+});
+
+</script> 
+{% endblock %}
+
+

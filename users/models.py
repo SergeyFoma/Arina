@@ -9,6 +9,9 @@ class Group(models.Model):
 
     def __str__(self):
         return self.number
+    class Meta:
+        verbose_name='Группа'
+        verbose_name_plural='Группы'
     
 # Предмет
 class Subject(models.Model):
@@ -16,6 +19,10 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name='Предмет'
+        verbose_name_plural='Предметы'
 
 # График
 class Schedule(models.Model):
@@ -25,6 +32,10 @@ class Schedule(models.Model):
 
     def __str__(self):
         return f"{self.date} | {self.subject} | {self.group}"
+    
+    class Meta:
+        verbose_name='Расписание'
+        verbose_name_plural='Расписание'
 
 # Назначение 
 class Assignment(models.Model):
@@ -33,6 +44,10 @@ class Assignment(models.Model):
 
     def __str__(self):
         return self.topic
+    
+    class Meta:
+        verbose_name='Тема'
+        verbose_name_plural='Темы'
     
 
 
@@ -60,7 +75,7 @@ class CustomUser(AbstractUser):
 
     class Meta:
         verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователя"
+        verbose_name_plural = "Пользователи"
 
     def __str__(self):
         return self.username
@@ -73,6 +88,10 @@ class Grade(models.Model):
 
     def __str__(self):
         return f"{self.student} — {self.value}"
+    
+    class Meta:
+        verbose_name='Оценка'
+        verbose_name_plural='Оценки'
 
 
 # class Profile(models.Model):

@@ -179,23 +179,3 @@ class ChangePasswordView(LoginRequiredMixin, FormView):
 # def password_reset(request):
 #     return render(request, "users/password_reset.html")
 
-@login_required
-def diary_data(request):
-    """API-эндпоинт для получения оценок студента в формате JSON"""
-    student = request.user
-
-    # Получаем оценки студента с нужными связями (оптимизация запросов)
-    grades_qs = Grade.objects.filter(student=student).select_related(
-        'assignment__schedule__subject'
-    )
-    
-    data = []
-    for grade in grades_qs:
-        data.append({
-            'date': grade.assignment.schedule.date.strftime('%d.%m.%Y'),
-            'subject': grade.assignment.schedule.subject.name,
-            'value': grade.value,
-            'topic': grade.assignment.topic,
-        })
-    
-    return JsonResponse({'grades': data})
